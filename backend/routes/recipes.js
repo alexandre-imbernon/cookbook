@@ -28,6 +28,27 @@ router.get('/', async (req, res) => {
     }
 });
 
+// Route GET pour récupérer une requête spécifique
+router.get('/:id', async (req, res) => {
+    const { id } = req.params;
+
+    console.log("Requête pour ID :", id);
+
+    try {
+        const recipe = await Recipe.findById(id);
+
+        if (!recipe) {
+            return res.status(404).json({ error: "Recette non trouvée." });
+        }
+
+        res.status(200).json(recipe);
+    } catch (err) {
+        console.error("Erreur lors de la récupération de la recette :", err.message);
+        res.status(400).json({ error: "Erreur lors de la récupération de la recette." });
+    }
+});
+
+
 // Route PUT pour mettre à jour une recette
 router.put('/:id', async (req, res) => {
     const { id } = req.params; // Récupérer l'ID de la recette depuis les paramètres
