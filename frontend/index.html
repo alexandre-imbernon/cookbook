@@ -1,0 +1,29 @@
+<form id="recipeForm">
+    <input type="text" name="title" placeholder="Titre" required />
+    <textarea name="description" placeholder="Description" required></textarea>
+    <input type="text" name="ingredients" placeholder="Ingrédients (séparés par des virgules)" required />
+    <input type="text" name="steps" placeholder="Étapes (séparées par des virgules)" required />
+    <input type="file" name="photo" accept=".jpg,.png" />
+    <button type="submit">Ajouter une recette</button>
+</form>
+
+<script>
+    const form = document.getElementById('recipeForm');
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const formData = new FormData(form);
+        const response = await fetch('http://localhost:3000/recipes', {
+            method: 'POST',
+            body: formData,
+        });
+
+        const result = await response.json();
+        if (response.ok) {
+            alert('Recette ajoutée avec succès');
+            window.location.reload();
+        } else {
+            alert(result.error);
+        }
+    });
+</script>
