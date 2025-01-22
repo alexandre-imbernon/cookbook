@@ -1,21 +1,38 @@
 const express = require('express');
 const router = express.Router();
 const Recipe = require('../models/Recipe');
+const multer = require('multer');
+const path = require('path');
 
-// Route POST pour ajouter une recette
-router.post('/', async (req, res) => {
-    try {
-        const { title, description, ingredients, steps, photo } = req.body;
-
-        const newRecipe = new Recipe({ title, description, ingredients, steps, photo });
-        await newRecipe.save();
-
-        res.status(201).json(newRecipe);
-    } catch (err) {
-        console.error('Erreur lors de la création de la recette :', err.message);
-        res.status(400).json({ error: 'Erreur lors de la création de la recette.' });
-    }
+// Configuration de multer pour le téléchargement d'images
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, './uploads'); // Spécifiez le dossier où les fichiers seront enregistrés
+  },
+  filename: (req, file, cb) => {
+    cb(null, Date.now() + path.extname(file.originalname)); // Donne un nom unique aux fichiers
+  }
 });
+
+const upload = multer({ storage: storage });
+
+// Route POST pour ajouter une recette (avec une image)
+router.post('/', upload.single('photo'), async (req, res) => {
+  try {
+    const { title, description, ingredients, steps } = req.body;
+    const photo = req.file ? req.file.filename : ''; // Si une image est téléchargée, récupère son nom
+
+    // Créer une nouvelle recette avec les données du formulaire
+    const newRecipe = new Recipe({ title, description, ingredients, steps, photo });
+    await newRecipe.save();
+
+    res.status(201).json(newRecipe); // Retourne la recette nouvellement créée
+  } catch (err) {
+    console.error('Erreur lors de la création de la recette :', err.message);
+    res.status(400).json({ error: 'Erreur lors de la création de la recette.' });
+  }
+});
+
 
 // Route GET pour obtenir toutes les recettes
 router.get('/', async (req, res) => {
