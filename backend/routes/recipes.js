@@ -48,7 +48,6 @@ router.get('/:id', async (req, res) => {
     }
 });
 
-
 // Route PUT pour mettre à jour une recette
 router.put('/:id', async (req, res) => {
     const { id } = req.params; // Récupérer l'ID de la recette depuis les paramètres
@@ -70,6 +69,25 @@ router.put('/:id', async (req, res) => {
     } catch (err) {
         console.error('Erreur lors de la mise à jour de la recette :', err.message);
         res.status(400).json({ error: 'Erreur lors de la mise à jour de la recette.' });
+    }
+});
+
+// Route DELETE pour mettre à jour une recette
+router.delete('/:id', async (req, res) => {
+    let { id } = req.params;
+    id = id.trim(); // Supprime les espaces ou caractères indésirables
+
+    try {
+        const deletedRecipe = await Recipe.findByIdAndDelete(id);
+
+        if (!deletedRecipe) {
+            return res.status(404).json({ error: "Recette non trouvée." });
+        }
+
+        res.status(200).json({ message: "Recette supprimée avec succès !" });
+    } catch (err) {
+        console.error("Erreur lors de la suppression de la recette :", err.message);
+        res.status(500).json({ error: "Erreur lors de la suppression de la recette." });
     }
 });
 

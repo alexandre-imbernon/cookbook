@@ -1,29 +1,25 @@
-<form id="recipeForm">
-    <input type="text" name="title" placeholder="Titre" required />
-    <textarea name="description" placeholder="Description" required></textarea>
-    <input type="text" name="ingredients" placeholder="Ingrédients (séparés par des virgules)" required />
-    <input type="text" name="steps" placeholder="Étapes (séparées par des virgules)" required />
-    <input type="file" name="photo" accept=".jpg,.png" />
-    <button type="submit">Ajouter une recette</button>
-</form>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <title>Cookbook</title>
+</head>
+<body>
+    <h1>Cookbook - Vos Recettes</h1>
 
-<script>
-    const form = document.getElementById('recipeForm');
-    form.addEventListener('submit', async (e) => {
-        e.preventDefault();
+    <form id="recipeForm">
+        <input type="text" name="title" placeholder="Titre de la recette" required />
+        <textarea name="description" placeholder="Description" required></textarea>
+        <input type="text" name="ingredients" placeholder="Ingrédients (séparés par des virgules)" required />
+        <input type="text" name="steps" placeholder="Étapes (séparées par des virgules)" required />
+        <input type="file" name="photo" accept="image/*" />
+        <button type="submit">Ajouter la recette</button>
+    </form>
 
-        const formData = new FormData(form);
-        const response = await fetch('http://localhost:3000/recipes', {
-            method: 'POST',
-            body: formData,
-        });
+    <div id="recipes"></div>
 
-        const result = await response.json();
-        if (response.ok) {
-            alert('Recette ajoutée avec succès');
-            window.location.reload();
-        } else {
-            alert(result.error);
-        }
-    });
-</script>
+    <script type="module" src="../app.js"></script>
+</body>
+</html>
