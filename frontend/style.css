@@ -1,0 +1,29 @@
+#recipes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+  
+  .recipe {
+    border: 1px solid #ccc;
+    padding: 15px;
+    width: 300px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  .recipe img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 5px;
+  }
+  
+  .recipe h2 {
+    font-size: 1.5em;
+    margin-bottom: 10px;
+  }
+  
+  .recipe p {
+    margin: 5px 0;
+  }
+  

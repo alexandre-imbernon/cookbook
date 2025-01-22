@@ -4,6 +4,13 @@ const Recipe = require('../models/Recipe');
 const multer = require('multer');
 const path = require('path');
 
+router.use((req, res, next) => {
+    res.header('Access-Control-Allow-Origin', 'http://localhost:5175');
+    res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
+    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+    next();
+  });
+  
 // Configuration de multer pour le téléchargement d'images
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
