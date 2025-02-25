@@ -2,8 +2,10 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const recipeRoutes = require('./routes/recipes'); // Importation des routes
-
 const app = express();
+
+// Servir le dossier 'uploads' pour les images
+app.use('/uploads', express.static('uploads'));
 
 // Middleware
 app.use(bodyParser.json());
