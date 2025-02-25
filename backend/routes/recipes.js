@@ -3,13 +3,16 @@ const router = express.Router();
 const Recipe = require('../models/Recipe');
 const multer = require('multer');
 const path = require('path');
+const cors = require('cors');
 
-router.use((req, res, next) => {
-    res.header('Access-Control-Allow-Origin', 'http://localhost:5175');
-    res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
-    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-    next();
-  });
+
+
+router.use(cors({
+  origin: '*', // Permet toutes les origines
+  methods: 'GET, POST, PUT, DELETE',
+  allowedHeaders: 'Content-Type, Authorization'
+}));
+
   
 // Configuration de multer pour le téléchargement d'images
 const storage = multer.diskStorage({
@@ -74,27 +77,27 @@ router.get('/:id', async (req, res) => {
 
 // Route PUT pour mettre à jour une recette
 router.put('/:id', async (req, res) => {
-    const { id } = req.params; // Récupérer l'ID de la recette depuis les paramètres
-    const { title, description, ingredients, steps, photo } = req.body; // Récupérer les données envoyées dans le corps de la requête
-
+    const { id } = req.params; // ID de la recette à mettre à jour
+    const { title, description, ingredients, steps } = req.body; // Données envoyées depuis le formulaire
+  
     try {
-        // Trouver la recette par ID et la mettre à jour
-        const updatedRecipe = await Recipe.findByIdAndUpdate(
-            id, // L'ID de la recette à mettre à jour
-            { title, description, ingredients, steps, photo }, // Les nouvelles données de la recette
-            { new: true } // Cette option permet de retourner la recette mise à jour après modification
-        );
-
-        if (!updatedRecipe) {
-            return res.status(404).json({ error: "Recette non trouvée." }); // Si la recette n'existe pas
-        }
-
-        res.status(200).json(updatedRecipe); // Retourner la recette mise à jour
+      const updatedRecipe = await Recipe.findByIdAndUpdate(
+        id,
+        { title, description, ingredients, steps },
+        { new: true }
+      );
+  
+      if (!updatedRecipe) {
+        return res.status(404).json({ error: 'Recette non trouvée.' });
+      }
+  
+      res.status(200).json(updatedRecipe);
     } catch (err) {
-        console.error('Erreur lors de la mise à jour de la recette :', err.message);
-        res.status(400).json({ error: 'Erreur lors de la mise à jour de la recette.' });
+      console.error('Erreur lors de la mise à jour de la recette :', err.message);
+      res.status(400).json({ error: 'Erreur lors de la mise à jour de la recette.' });
     }
-});
+  });
+  
 
 // Route DELETE pour mettre à jour une recette
 router.delete('/:id', async (req, res) => {
