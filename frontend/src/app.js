@@ -1,67 +1,87 @@
-// Fonction pour récupérer et afficher toutes les recettes
+let allRecipes = []; // Stocke toutes les recettes
+
+// Fonction pour récupérer toutes les recettes et les afficher
 async function fetchRecipes() {
   try {
-    console.log("Chargement des recettes..."); // Vérification console
-    const searchInput = document.getElementById('searchIngredients').value.trim();
-    const query = searchInput ? `?ingredients=${encodeURIComponent(searchInput)}` : '';
-
-    const response = await fetch(`http://localhost:3000/api/recipes${query}`);
-    const recipes = await response.json();
-    
-    console.log("Recettes reçues :", recipes); // Afficher les recettes reçues
-
-    const recipesContainer = document.getElementById('recipes');
-    recipesContainer.innerHTML = ''; 
-
-    if (recipes.length === 0) {
-      recipesContainer.innerHTML = '<p>Aucune recette trouvée.</p>';
-      return;
-    }
-
-    recipes.forEach((recipe) => {
-      const recipeElement = document.createElement('div');
-      recipeElement.className = 'recipe';
-
-      recipeElement.innerHTML = `
-        <h2>${recipe.title}</h2>
-        <p>${recipe.description}</p>
-        <p><strong>Ingrédients :</strong> ${recipe.ingredients.join(', ')}</p>
-        <p><strong>Étapes :</strong> ${recipe.steps.join(', ')}</p>
-        <img src="http://localhost:3000/uploads/${recipe.photo}" alt="${recipe.title}" />
-        <button class="edit-btn" data-id="${recipe._id}">Modifier</button>
-        <button class="delete-btn" data-id="${recipe._id}">Supprimer</button>
-      `;
-
-      recipesContainer.appendChild(recipeElement);
-    });
-
-    document.querySelectorAll('.delete-btn').forEach(button => {
-      button.addEventListener('click', async (e) => {
-        const recipeId = e.target.getAttribute('data-id');
-        await deleteRecipe(recipeId);
-      });
-    });
-
-    document.querySelectorAll('.edit-btn').forEach(button => {
-      button.addEventListener('click', async (e) => {
-        const recipeId = e.target.getAttribute('data-id');
-        openEditForm(recipeId);
-      });
-    });
-
+    console.log("Chargement des recettes...");
+    const response = await fetch('http://localhost:3000/api/recipes');
+    allRecipes = await response.json(); // Stocker les recettes en mémoire
+    console.log("Recettes reçues :", allRecipes);
+    displayRecipes(allRecipes);
   } catch (error) {
     console.error('Erreur lors de la récupération des recettes :', error);
   }
 }
 
-// Événement de recherche
-document.getElementById('searchBtn').addEventListener('click', () => {
-  fetchRecipes();
+// Afficher les recettes dans le DOM
+function displayRecipes(recipes) {
+  const recipesContainer = document.getElementById('recipes');
+  recipesContainer.innerHTML = '';
+
+  recipes.forEach((recipe) => {
+    const recipeElement = document.createElement('div');
+    recipeElement.className = 'recipe';
+
+    recipeElement.innerHTML = `
+      <h2>${recipe.title}</h2>
+      <p>${recipe.description}</p>
+      <p><strong>Ingrédients :</strong> ${recipe.ingredients.join(', ')}</p>
+      <p><strong>Étapes :</strong> ${recipe.steps.join(', ')}</p>
+      <img src="http://localhost:3000/uploads/${recipe.photo}" alt="${recipe.title}" />
+      <button class="edit-btn" data-id="${recipe._id}">Modifier</button>
+      <button class="delete-btn" data-id="${recipe._id}">Supprimer</button>
+    `;
+
+    recipesContainer.appendChild(recipeElement);
+  });
+
+  // Attache les événements aux boutons après l'affichage
+  addEventListeners();
+}
+
+// Filtrer les recettes en temps réel
+document.getElementById('searchIngredients').addEventListener('input', (e) => {
+  const searchTerm = e.target.value.toLowerCase();
+  const filteredRecipes = allRecipes.filter(recipe => 
+    recipe.ingredients.some(ingredient => ingredient.toLowerCase().includes(searchTerm))
+  );
+  displayRecipes(filteredRecipes);
 });
 
-// Charger les recettes au démarrage
-window.onload = fetchRecipes;
+// Ajouter les événements sur les boutons Modifier et Supprimer
+function addEventListeners() {
+  document.querySelectorAll('.delete-btn').forEach(button => {
+    button.addEventListener('click', async (e) => {
+      const recipeId = e.target.getAttribute('data-id');
+      await deleteRecipe(recipeId);
+    });
+  });
 
+  document.querySelectorAll('.edit-btn').forEach(button => {
+    button.addEventListener('click', async (e) => {
+      const recipeId = e.target.getAttribute('data-id');
+      openEditForm(recipeId);
+    });
+  });
+}
+
+// Ouvrir le formulaire de modification
+async function openEditForm(recipeId) {
+  try {
+    const response = await fetch(`http://localhost:3000/api/recipes/${recipeId}`);
+    const recipe = await response.json();
+
+    document.getElementById('editRecipeId').value = recipe._id;
+    document.getElementById('editTitle').value = recipe.title;
+    document.getElementById('editDescription').value = recipe.description;
+    document.getElementById('editIngredients').value = recipe.ingredients.join(', ');
+    document.getElementById('editSteps').value = recipe.steps.join(', ');
+
+    document.getElementById('editFormContainer').style.display = 'block';
+  } catch (error) {
+    console.error('Erreur lors du chargement de la recette à modifier :', error);
+  }
+}
 
 // Modifier une recette
 document.getElementById('editRecipeForm').addEventListener('submit', async (e) => {
@@ -85,7 +105,7 @@ document.getElementById('editRecipeForm').addEventListener('submit', async (e) =
     if (response.ok) {
       alert('Recette mise à jour avec succès !');
       document.getElementById('editFormContainer').style.display = 'none';
-      fetchRecipes(); // Recharger la liste des recettes
+      fetchRecipes();
     } else {
       const error = await response.json();
       alert(`Erreur : ${error.error}`);
