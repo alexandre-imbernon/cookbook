@@ -12,20 +12,49 @@ async function fetchRecipes() {
 
     recipes.forEach((recipe) => {
       const recipeElement = document.createElement('div');
-      recipeElement.className = 'recipe';
-
+      recipeElement.className = ' col-md-6 mb-4';
+  
       recipeElement.innerHTML = `
-        <h2>${recipe.title}</h2>
-        <p>${recipe.description}</p>
-        <p><strong>Ingrédients :</strong> ${recipe.ingredients.join(', ')}</p>
-        <p><strong>Étapes :</strong> ${recipe.steps.join(', ')}</p>
-        <img src="http://localhost:3000/uploads/${recipe.photo}" alt="${recipe.title}" />
-        <button class="edit-btn" data-id="${recipe._id}">Modifier</button>
-        <button class="delete-btn" data-id="${recipe._id}">Supprimer</button>
+          <div class="col-md-4">
+              <div class="card h-100 shadow-sm">
+                  <img src="http://localhost:3000/uploads/${recipe.photo}" alt="${recipe.title}" />
+                  <div class="card-body">
+                      <h5 class="card-title">${recipe.title}</h5>
+                      <p class="card-text">${recipe.description}</p>
+                      <p><strong>Ingrédients :</strong> ${recipe.ingredients.join(', ')}</p>
+                      <p><strong>Étapes :</strong> ${recipe.steps.join(', ')}</p>
+                      <button class="btn btn-success edit-btn" data-id="${recipe._id}"><i class="fas fa-edit"></i> Modifier</button>                    
+                    <button class="btn btn-danger delete-btn" data-id="${recipe._id}"><i class="fas fa-trash-alt"></i> Supprimer</button>                 
+                      <button class="btn btn-danger favorite-btn" data-id="${recipe._id}" data-title="${recipe.title}" data-photo="${recipe.photo}">Ajouter aux favoris</button>
+                  </div>
+              </div>
+          </div>
       `;
-
+  
+      // Ajouter la recette à la liste des recettes affichées
       recipesContainer.appendChild(recipeElement);
-    });
+  
+      // Ajouter un écouteur d'événements pour le bouton "Ajouter aux favoris"
+      const favoriteBtn = recipeElement.querySelector('.favorite-btn');
+      favoriteBtn.addEventListener('click', function() {
+          ajouterFavoris(recipe._id, recipe.title, recipe.photo);
+      });
+  });
+  
+  // Fonction pour ajouter une recette aux favoris
+  function ajouterFavoris(id, title, photo) {
+      let favoris = JSON.parse(localStorage.getItem('favoris')) || [];
+      
+      // Vérifier si la recette est déjà dans les favoris
+      if (!favoris.some(fav => fav.id === id)) {
+          favoris.push({ id, title, photo });
+          localStorage.setItem('favoris', JSON.stringify(favoris));
+          alert(`${title} a été ajouté aux favoris !`);
+      } else {
+          alert(`${title} est déjà dans vos favoris.`);
+      }
+  }
+  
 
     // Ajouter événements aux boutons de suppression
     document.querySelectorAll('.delete-btn').forEach(button => {

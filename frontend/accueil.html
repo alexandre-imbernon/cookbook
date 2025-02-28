@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cookbook - Accueil</title>
+    <!-- Lien Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #FFF8E5;
+        }
+
+        .hero-image {
+            width: 100%;           /* Prend toute la largeur */
+            height: 400px;         /* Hauteur réduite pour mieux s'intégrer */
+            object-fit: cover;     /* Couvre l'espace sans déformation */
+            object-position: top;  /* Positionne l'image par le haut pour éviter le zoom bas */
+            border-radius: 10px;   /* Coins arrondis */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Ombre douce autour de l'image */
+        }
+
+        .hero-section {
+            text-align: center;
+            margin: 30px 0;
+        }
+
+        .hero-title {
+            color: #536E52;
+            font-weight: bold;
+        }
+
+        /* Effet de zoom sur les cartes */
+        .card-img-top {
+            transition: transform 0.3s ease-in-out; /* Transition douce lors du zoom */
+        }
+
+        .card-img-top:hover {
+            transform: scale(1.1); /* Agrandissement de l'image lors du survol */
+        }
+
+        /* Si tu veux un effet de translation */
+        .card:hover .card-img-top {
+            transform: translateY(-10px); /* Déplace l'image vers le haut */
+        }
+
+        /* Ajout d'un lien autour des images pour les rendre cliquables */
+        .card-img-wrapper {
+            display: block; /* Pour que le lien occupe toute la carte */
+            width: 100%;
+            height: 100%;
+        }
+
+        .card {
+            background-color: #FFF8E5;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- HEADER NAVBAR -->
+    <nav class="navbar navbar-expand-lg" style="background-color: #536E52;">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">Cookbook</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="#">Accueil</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">Ajouter une recette</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Toutes les recettes</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Favoris</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Connexion/Inscription</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <img src="salade.png" alt="Cuisine délicieuse" class="hero-image">
+
+    <!-- IMAGE PRINCIPALE -->
+    <section class="hero-section">
+        <h1 class="hero-title">Bienvenue sur Cookbook</h1>
+        <p>Découvrez et partagez vos meilleures recettes !</p>
+    </section>
+
+    <div class="container mt-5">
+        <div class="d-flex justify-content-between flex-wrap">
+            <!-- Card Tomate -->
+            <div class="card" style="width: 18%;">
+                <a href="#" class="card-img-wrapper">
+                    <img src="2.png" class="card-img-top" alt="Tomate">
+                </a>
+                <div class="card-body">
+                    <h5 class="card-title">Tomate</h5>
+                </div>
+                <hr class="float-end" style="width: 50%; border-color: #536E52;">
+            </div>
+    
+            <!-- Card Salade -->
+            <div class="card" style="width: 18%;">
+                <a href="#" class="card-img-wrapper">
+                    <img src="3.png" class="card-img-top" alt="Salade">
+                </a>
+                <div class="card-body">
+                    <h5 class="card-title">Salade</h5>
+                </div>
+                <hr class="float-end" style="width: 50%; border-color: #536E52;">
+            </div>
+    
+            <!-- Card Pâtes -->
+            <div class="card" style="width: 18%;">
+                <a href="#" class="card-img-wrapper">
+                    <img src="4.png" class="card-img-top" alt="Pâtes">
+                </a>
+                <div class="card-body">
+                    <h5 class="card-title">Pâtes</h5>
+                </div>
+                <hr class="float-end" style="width: 50%; border-color: #536E52;">
+            </div>
+    
+            <!-- Card Poulet -->
+            <div class="card" style="width: 18%;">
+                <a href="#" class="card-img-wrapper">
+                    <img src="5.png" class="card-img-top" alt="Poulet">
+                </a>
+                <div class="card-body">
+                    <h5 class="card-title">Poulet</h5>
+                </div>
+                <hr class="float-end" style="width: 50%; border-color: #536E52;">
+            </div>
+    
+            <!-- Card Citron -->
+            <div class="card" style="width: 18%;">
+                <a href="#" class="card-img-wrapper">
+                    <img src="6.png" class="card-img-top" alt="Citron">
+                </a>
+                <div class="card-body">
+                    <h5 class="card-title">Citron</h5>
+                </div>
+                <hr class="float-end" style="width: 50%; border-color: #536E52;">
+            </div>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer style="background-color: #536E52; color: white; padding: 20px 0; text-align: center; margin-top: 50px;">
+        <div class="container">
+            <p>&copy; 2025 Cookbook. Tous droits réservés.</p>
+            <p>
+                <a href="#" style="color: #d4d4d4; text-decoration: none;">Politique de confidentialité</a> | 
+                <a href="#" style="color: #d4d4d4; text-decoration: none;">Mentions légales</a> | 
+                <a href="#" style="color: #d4d4d4; text-decoration: none;">Contact</a>
+            </p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script type="module" src="/src/app.js"></script>
+</body>
+</html>

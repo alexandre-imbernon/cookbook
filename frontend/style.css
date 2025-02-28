@@ -1,29 +1,69 @@
-#recipes {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-  }
-  
-  .recipe {
-    border: 1px solid #ccc;
-    padding: 15px;
-    width: 300px;
-    border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  }
-  
-  .recipe img {
-    max-width: 100%;
-    height: auto;
-    border-radius: 5px;
-  }
-  
-  .recipe h2 {
-    font-size: 1.5em;
-    margin-bottom: 10px;
-  }
-  
-  .recipe p {
-    margin: 5px 0;
-  }
-  
+body {
+  background-color: #f8f9fa;
+}
+
+h1 {
+  color: #536E52;
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+#recipeForm, #editFormContainer {
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  margin-bottom: 40px;
+}
+
+#recipeForm button,
+#editFormContainer button {
+  background: #536E52;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+#recipeForm button:hover,
+#editFormContainer button:hover {
+  background: #c82333;
+}
+
+#recipes .card {
+  border: none;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Limiter la hauteur de l'image dans la carte */
+.card-img-top {
+  height: 200px;
+  object-fit: cover;
+  cursor: pointer;
+}
+
+#editFormContainer {
+  display: none;
+}
+
+.card-img-top {
+  height: 200px;         /* Hauteur fixée pour uniformiser les images */
+  object-fit: cover;     /* Permet de couvrir l'espace sans déformer l'image */
+  width: 100%;           /* Assure que l'image occupe toute la largeur de la card */
+  cursor: pointer;
+}
+
+.recipes-container {
+  display: flex;
+  flex-wrap: nowrap; /* Empêche le retour à la ligne */
+  overflow-x: auto;  /* Ajoute un défilement horizontal */
+  gap: 20px;
+}
+
+.recipes-container .recipe {
+  min-width: 300px;  /* Largeur minimale de chaque carte */
+  flex: 0 0 auto;    /* Empêche le redimensionnement automatique */
+}
