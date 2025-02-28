@@ -2,13 +2,21 @@
 async function fetchRecipes() {
   try {
     console.log("Chargement des recettes..."); // Vérification console
-    const response = await fetch('http://localhost:3000/api/recipes');
+    const searchInput = document.getElementById('searchIngredients').value.trim();
+    const query = searchInput ? `?ingredients=${encodeURIComponent(searchInput)}` : '';
+
+    const response = await fetch(`http://localhost:3000/api/recipes${query}`);
     const recipes = await response.json();
     
     console.log("Recettes reçues :", recipes); // Afficher les recettes reçues
 
     const recipesContainer = document.getElementById('recipes');
     recipesContainer.innerHTML = ''; 
+
+    if (recipes.length === 0) {
+      recipesContainer.innerHTML = '<p>Aucune recette trouvée.</p>';
+      return;
+    }
 
     recipes.forEach((recipe) => {
       const recipeElement = document.createElement('div');
@@ -27,7 +35,6 @@ async function fetchRecipes() {
       recipesContainer.appendChild(recipeElement);
     });
 
-    // Ajouter événements aux boutons de suppression
     document.querySelectorAll('.delete-btn').forEach(button => {
       button.addEventListener('click', async (e) => {
         const recipeId = e.target.getAttribute('data-id');
@@ -35,7 +42,6 @@ async function fetchRecipes() {
       });
     });
 
-    // Ajouter événements aux boutons de modification
     document.querySelectorAll('.edit-btn').forEach(button => {
       button.addEventListener('click', async (e) => {
         const recipeId = e.target.getAttribute('data-id');
@@ -48,23 +54,14 @@ async function fetchRecipes() {
   }
 }
 
-// Ouvrir le formulaire de modification avec les infos de la recette
-async function openEditForm(recipeId) {
-  try {
-    const response = await fetch(`http://localhost:3000/api/recipes/${recipeId}`);
-    const recipe = await response.json();
+// Événement de recherche
+document.getElementById('searchBtn').addEventListener('click', () => {
+  fetchRecipes();
+});
 
-    document.getElementById('editRecipeId').value = recipe._id;
-    document.getElementById('editTitle').value = recipe.title;
-    document.getElementById('editDescription').value = recipe.description;
-    document.getElementById('editIngredients').value = recipe.ingredients.join(', ');
-    document.getElementById('editSteps').value = recipe.steps.join(', ');
+// Charger les recettes au démarrage
+window.onload = fetchRecipes;
 
-    document.getElementById('editFormContainer').style.display = 'block';
-  } catch (error) {
-    console.error('Erreur lors du chargement de la recette à modifier :', error);
-  }
-}
 
 // Modifier une recette
 document.getElementById('editRecipeForm').addEventListener('submit', async (e) => {

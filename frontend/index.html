@@ -8,7 +8,7 @@
 </head>
 <body>
     <h1>Cookbook - Ajoutez vos recettes</h1>
-
+    
     <form id="recipeForm">
         <input type="text" name="title" placeholder="Titre de la recette" required />
         <textarea name="description" placeholder="Description" required></textarea>
@@ -17,27 +17,32 @@
         <input type="file" name="photo" accept="image/*" />
         <button type="submit">Ajouter la recette</button>
     </form>
+    
+    <h1>Cookbook - Trouvez votre prochaine recette</h1>
+    <label for="searchIngredients">Rechercher par ingrédients :</label>
+    <input type="text" id="searchIngredients" placeholder="Ex: tomate, oignon">
+    <button id="searchBtn">Rechercher</button>
+    
     <h1>Cookbook - Consultez toutes nos recettes</h1>
-
+    
     <div id="recipes"></div>
     
     <div id="editFormContainer" style="display: none;">
         <h2>Modifier la recette</h2>
         <form id="editRecipeForm">
-          <input type="hidden" id="editRecipeId" />
-          <label for="editTitle">Titre :</label>
-          <input type="text" id="editTitle" required />
-          <label for="editDescription">Description :</label>
-          <textarea id="editDescription" required></textarea>
-          <label for="editIngredients">Ingrédients (séparés par une virgule) :</label>
-          <input type="text" id="editIngredients" required />
-          <label for="editSteps">Étapes (séparés par une virgule) :</label>
-          <input type="text" id="editSteps" required />
-          <button type="submit">Mettre à jour</button>
-          <button type="button" id="cancelEdit">Annuler</button>
+            <input type="hidden" id="editRecipeId" />
+            <label for="editTitle">Titre :</label>
+            <input type="text" id="editTitle" required />
+            <label for="editDescription">Description :</label>
+            <textarea id="editDescription" required></textarea>
+            <label for="editIngredients">Ingrédients (séparés par une virgule) :</label>
+            <input type="text" id="editIngredients" required />
+            <label for="editSteps">Étapes (séparés par une virgule) :</label>
+            <input type="text" id="editSteps" required />
+            <button type="submit">Mettre à jour</button>
+            <button type="button" id="cancelEdit">Annuler</button>
         </form>
-      </div>
-      
+    </div>
 
     <script type="module" src="/src/app.js"></script>
 </body>

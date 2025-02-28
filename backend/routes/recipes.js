@@ -44,16 +44,26 @@ router.post('/', upload.single('photo'), async (req, res) => {
 });
 
 
-// Route GET pour obtenir toutes les recettes
+// Route GET pour obtenir toutes les recettes ou filtrer par ingrédients
 router.get('/', async (req, res) => {
-    try {
-        const recipes = await Recipe.find(); // Récupérer toutes les recettes
-        res.status(200).json(recipes);
-    } catch (err) {
-        console.error('Erreur lors de la récupération des recettes :', err.message);
-        res.status(400).json({ error: 'Erreur lors de la récupération des recettes.' });
-    }
+  try {
+      const { ingredients } = req.query;
+
+      let query = {}; // Base de la requête
+
+      if (ingredients) {
+          const ingredientsArray = ingredients.split(',').map(ing => ing.trim()); // Convertit en tableau
+          query.ingredients = { $all: ingredientsArray }; // Recherche toutes les valeurs
+      }
+
+      const recipes = await Recipe.find(query); // Exécute la requête
+      res.status(200).json(recipes);
+  } catch (err) {
+      console.error('Erreur lors de la récupération des recettes :', err.message);
+      res.status(400).json({ error: 'Erreur lors de la récupération des recettes.' });
+  }
 });
+
 
 // Route GET pour récupérer une requête spécifique
 router.get('/:id', async (req, res) => {
