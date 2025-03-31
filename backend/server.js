@@ -3,17 +3,16 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const recipeRoutes = require('./routes/recipes'); // Importation des routes
 const app = express();
+const authRoutes = require('./routes/auth');
 
-// Servir le dossier 'uploads' pour les images
+// Ajout de bodyParser avant les routes
+app.use(bodyParser.json()); // Permet de traiter le corps des requêtes en JSON
+
+// Routes
+app.use('/auth', authRoutes);
 app.use('/uploads', express.static('uploads'));
-
-// Middleware
-app.use(bodyParser.json());
-
-// Utilisation des routes
 app.use('/api/recipes', recipeRoutes); // Préfixe pour les routes de recettes
 
-// Connexion à MongoDB
 mongoose.connect('mongodb://localhost:27017/cookbook', {
     useNewUrlParser: true,
     useUnifiedTopology: true,
