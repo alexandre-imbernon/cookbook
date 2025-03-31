@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 const Create = () => {
@@ -10,6 +11,9 @@ const Create = () => {
         photo: null,
     });
 
+    const navigate = useNavigate(); // Pour rediriger l'utilisateur
+    console.log("Connexion réussie, redirection...");
+    
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData({ ...formData, [name]: value });
@@ -25,7 +29,23 @@ const Create = () => {
         for (const key in formData) {
             data.append(key, formData[key]);
         }
-        await axios.post("http://localhost:3000/api/recipes", data);
+
+        try {
+            const token = localStorage.getItem("token"); // Récupération du token de l'utilisateur
+            const config = {
+                headers: { Authorization: `Bearer ${token}` }, // Ajout du token dans la requête
+            };
+
+            await axios.post("http://localhost:3000/api/recipes", data, config);
+            navigate("/"); // Redirection vers la page d'accueil après création
+        } catch (error) {
+            if (error.response && error.response.status === 401) {
+                alert("Pour modifier ou ajouter des recettes, vous devez être identifié !");
+                navigate("/login"); // Redirige vers la page de connexion si l'utilisateur n'est pas authentifié
+            } else {
+                console.error("Erreur lors de l'ajout de la recette :", error);
+            }
+        }
     };
 
     return (

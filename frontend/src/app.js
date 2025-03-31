@@ -1,5 +1,19 @@
 let allRecipes = []; // Stocke toutes les recettes
 
+// Vérifier si l'utilisateur est connecté
+function isAuthenticated() {
+  const token = localStorage.getItem('token');
+  return token !== null;
+}
+
+// Rediriger vers la connexion si l'utilisateur n'est pas connecté
+function requireAuth() {
+  if (!isAuthenticated()) {
+    alert('Pour modifier ou ajouter des recettes, vous devez être identifié');
+    window.location.href = '/login.html?loginRequired=true'; 
+  }
+}
+
 // Fonction pour récupérer toutes les recettes et les afficher
 async function fetchRecipes() {
   try {

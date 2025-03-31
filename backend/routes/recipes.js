@@ -4,6 +4,7 @@ const Recipe = require('../models/Recipe');
 const multer = require('multer');
 const path = require('path');
 const cors = require('cors');
+const authMiddleware = require('../routes/auth').authMiddleware;
 
 
 
@@ -27,7 +28,7 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 // Route POST pour ajouter une recette (avec une image)
-router.post('/', upload.single('photo'), async (req, res) => {
+router.post('/', authMiddleware, upload.single('photo'), async (req, res) => {
   try {
     const { title, description, ingredients, steps } = req.body;
     const photo = req.file ? req.file.filename : ''; // Si une image est téléchargée, récupère son nom
@@ -45,7 +46,7 @@ router.post('/', upload.single('photo'), async (req, res) => {
 
 
 // Route GET pour obtenir toutes les recettes ou filtrer par ingrédients
-router.get('/', async (req, res) => {
+router.get('/',  async (req, res) => {
   try {
       const { ingredients } = req.query;
 
@@ -86,7 +87,7 @@ router.get('/:id', async (req, res) => {
 });
 
 // Route PUT pour mettre à jour une recette
-router.put('/:id', async (req, res) => {
+router.put('/:id',  authMiddleware, async (req, res) => {
     const { id } = req.params; // ID de la recette à mettre à jour
     const { title, description, ingredients, steps } = req.body; // Données envoyées depuis le formulaire
   
@@ -110,7 +111,7 @@ router.put('/:id', async (req, res) => {
   
 
 // Route DELETE pour mettre à jour une recette
-router.delete('/:id', async (req, res) => {
+router.delete('/:id',  authMiddleware, async (req, res) => {
     let { id } = req.params;
     id = id.trim(); // Supprime les espaces ou caractères indésirables
 

@@ -65,14 +65,18 @@ router.post('/login', async (req, res) => {
 // Middleware pour vérifier le token
 const authMiddleware = (req, res, next) => {
     const token = req.header('Authorization');
-    if (!token) return res.status(401).json({ error: 'Accès refusé' });
+    if (!token) {
+        return res.status(401).json({ error: 'Vous devez être connecté pour effectuer cette action.' });
+    }
     try {
         const verified = jwt.verify(token.replace('Bearer ', ''), JWT_SECRET);
         req.user = verified;
         next();
     } catch (err) {
-        res.status(401).json({ error: 'Token invalide' });
+        res.status(401).json({ error: 'Token invalide, veuillez vous reconnecter.' });
     }
 };
 
-module.exports = router;
+
+module.exports = router; 
+module.exports.authMiddleware = authMiddleware;
